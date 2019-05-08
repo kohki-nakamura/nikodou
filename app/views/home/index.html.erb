@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' type='text/javascript'></script>
+</head>
+<script type="text/javascript">
+// コメントの場所を指定
+function setPosition(id) {
+    var top = $('#nicoscreen').offset();
+    var itemHeight = $(id).height();
+    var bottom = top.top + $('#nicoscreen').height() - itemHeight;
+    var length = bottom - top.top;
+    return bottom - length * Math.random();
+}
+var commentNum = 0;
+function addComment() {
+    var comment = $("#comment_text").val();
+    commentNum++;
+    var commentPos = $('#nicoscreen').offset();
+    var nico_comment = $('<div id="item" style="font-size: 18px; color: white; font-weight: bold; text-shadow: black 1px 1px 1px; width: 100px; white-space: nowrap; position: absolute;">' + comment + '</li>').appendTo('#nicoscreen');
+    var offset = nico_comment.offset({top:setPosition('#item'),left:commentPos.left + $('#nicoscreen').width()});
+    var animation = offset.animate({left:-$(window).width()}, {
+        duration: 10000,
+        easing: 'linear',
+        queue: false,
+        complete: function () {
+            animation.hide();
+        }
+    });
+    // リスト表示
+    if (commentNum % 2) {
+        $('<div id="list_item" style="background-color: #121212; color:white">' + comment + '</div>').prependTo('#list');
+    } else {
+        $('<div id="list_item" style="background-color: #1e1e1e; color:white">' + comment + '</div>').prependTo('#list');
+    }
+    $("#comment_text").val("");
+}
+</script>
+<body>
+    <div id="nicoscreen" style="overflow: hidden; height: 315px; width: 560px; position: relative;">
+        <iframe width="560" height="315" src="http://www.youtube.com/embed/PqJNc9KVIZE" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div id="comment_list">
+        <ul id="list">
+        </ul>
+    </div>
+    <input id="comment_text" name="comment" type="text" /><input type="button" onclick="addComment()" value="コメント" />
+</body>
+</html>
